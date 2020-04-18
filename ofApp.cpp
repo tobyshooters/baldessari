@@ -1,6 +1,8 @@
 #include "ofApp.h"
 
 void ofApp::setup(){
+    ofSetFullscreen(true);
+
     ofSetFrameRate(25);
     ofBackground(0);
     ofFill();
@@ -36,6 +38,9 @@ void ofApp::update(){
     // Find all intersections, check IOU for embodiment!
     intersections.clear();
     for (auto const &kv : pm.currPoses) {
+        if (kv.first == embodiedIndex)
+            continue;
+
         ofx::Clipper clipper;
         clipper.addPolyline(kv.second, ClipperLib::ptSubject);
         clipper.addPolyline(tsps.currBlob.pline, ClipperLib::ptClip);
@@ -47,12 +52,14 @@ void ofApp::update(){
             // Compute IOU
             float I = 0;
             for (ofPolyline &p : isects)
-                I += p.getArea();
-            float U = kv.second.getArea() + tsps.currBlob.pline.getArea() - I;
+                I += fabs(p.getArea());
+            float U = fabs(kv.second.getArea())
+                + fabs(tsps.currBlob.pline.getArea()) - I;
             float IOU = I / U;
 
+            // TODO: once embodied, can't embody again! Need to check once embodied character dissappears
             // Check if should embody!
-            if (IOU > 0.7f) {
+            if (IOU > 0.5f) {
                 cout << "EMBODIED THE CHARACTER!" << endl;
                 embodiedIndex = kv.first;
             }
