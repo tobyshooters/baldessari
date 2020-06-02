@@ -18,8 +18,11 @@ class ofApp : public ofBaseApp{
         unordered_map<string, ofColor> colors;
         int embodiedIndex;
 
+        string scene;
         PoseManager pm;
         ImageSequenceManager ism;
         TSPS tsps;
         vector<ofPolyline> intersections;
+        bool saveFrames;
+        ofShader shader;
 };

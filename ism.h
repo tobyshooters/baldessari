@@ -6,6 +6,7 @@ typedef struct MotionDirectory {
     size_t num;
 } MotionDirectory;
 
+
 class ImageSequenceManager {
     public:
         ImageSequenceManager() {}
@@ -14,6 +15,7 @@ class ImageSequenceManager {
             ofDirectory d(path);
             d.listDir();
             d.allowExt("png");
+            d.allowExt("jpg");
             d.listDir();
             d.sort();
 
@@ -41,4 +43,3 @@ class ImageSequenceManager {
     private:
         MotionDirectory m;
 };
-
